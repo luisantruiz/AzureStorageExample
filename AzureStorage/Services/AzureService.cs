@@ -66,11 +66,22 @@ namespace AzureStorage.Services
 
         public void SaveTaskToTable(Task task)
         {
+            GetTableReference();
+
+            task.CreatedDate = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+
+            TableOperation insertOperation = TableOperation.Insert(task);
+
+            _cloudTable.Execute(insertOperation);
         }
 
         public List<Task> GetAllTasksFromTable()
         {
             var tasksList = new List<Task>();
+
+            GetTableReference();
+            TableQuery<Task> query = new TableQuery<Task>();
+            tasksList = _cloudTable.ExecuteQuery(query).ToList();
 
             return tasksList;
         }
@@ -91,6 +102,7 @@ namespace AzureStorage.Services
 
         private CloudBlobContainer _cloudBlobContainer;
         private CloudQueue _cloudQueue;
+        private CloudTable _cloudTable;
 
         private void CreateCloudBlobClient()
         {
@@ -119,8 +131,7 @@ namespace AzureStorage.Services
             // Get a queue client
             if (_cloudQueueClient == null)
             {
-                _cloudQueueClient = _cloudStorageAccount.CreateCloudQueueClient();
-                
+                _cloudQueueClient = _cloudStorageAccount.CreateCloudQueueClient();   
             }
         }
 
@@ -132,6 +143,27 @@ namespace AzureStorage.Services
             {
                 _cloudQueue = _cloudQueueClient.GetQueueReference(_queueName);
                 _cloudQueue.CreateIfNotExists();
+            }
+        }
+
+        private void CreateCloudTableClient()
+        {
+            // Get a table client
+            if (_cloudTableClient == null)
+            {
+                _cloudTableClient = _cloudStorageAccount.CreateCloudTableClient();
+
+            }
+        }
+
+        private void GetTableReference()
+        {
+            CreateCloudTableClient();
+
+            if (_cloudTable == null)
+            {
+                _cloudTable = _cloudTableClient.GetTableReference(_tableName);
+                _cloudTable.CreateIfNotExists();
             }
         }
 

@@ -1,13 +1,32 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using System;
 
 namespace AzureStorage.Models
 {
-    public class Task
+    public class Task : TableEntity
     {
-        public int Id { get; set; }
+        public string Description
+        {
+            get
+            {
+                return PartitionKey;
+            }
+            set
+            {
+                PartitionKey = value;
+            }
+        }
 
-        public string Description { get; set; }
-
-        public DateTime CreatedDate { get; set; }
+        public string CreatedDate
+        {
+            get
+            {
+                return RowKey;
+            }
+            set
+            {
+                RowKey = value;
+            }
+        }
     }
 }
