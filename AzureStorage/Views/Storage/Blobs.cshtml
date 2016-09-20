@@ -1,0 +1,32 @@
+﻿@model List<string>
+
+@{
+    ViewBag.Title = "Blobs";
+}
+
+<form method="post" action="SaveFile" enctype="multipart/form-data">
+    <div class="form-group">
+        <input type="file" name="file" />
+    </div>
+    
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+<h1>List of Blobs</h1>
+<table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Blob Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var blob in Model)
+            {
+                <tr>
+                    <td>@blob</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

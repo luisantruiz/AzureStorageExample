@@ -1,0 +1,35 @@
+﻿@model List<AzureStorage.Models.Task>
+
+@{
+    ViewBag.Title = "Tables";
+}
+
+<form method="post">
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input name="description" type="text" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+<h1>List of Tasks</h1>
+<table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Description</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
